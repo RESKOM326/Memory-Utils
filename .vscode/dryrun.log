@@ -1,0 +1,6 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/reskom326-lx/repos/Memory-Utils'
+make: Leaving directory '/home/reskom326-lx/repos/Memory-Utils'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+

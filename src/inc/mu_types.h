@@ -63,7 +63,6 @@ typedef struct memory_chunk
     BOOL    is_readable;
     BOOL    is_writable;
     BOOL    is_private;
-    BOOL    modifiable;
     
 } MU_MEM_CHUNK;
 

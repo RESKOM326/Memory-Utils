@@ -9,7 +9,7 @@
  * 
  */
 
-#include "inc/mu_scan_utils.h"
+#include "inc/mu_utils.h"
 #include "inc/mu_diag.h"
 #include <sys/types.h>
 #include <signal.h>
@@ -18,7 +18,7 @@
 
 #define CHECK_EXISTENCE_AND_PERMS   0
 #define MIN_BYTES_MAPS_STR          12
-#define MIN_BYTES_MEM_STR           11  
+#define MIN_BYTES_MEM_STR           11
 
 MU_ERROR pid_exists(PID target)
 {
@@ -38,8 +38,11 @@ MU_ERROR pid_exists(PID target)
         diag_error(trace, is_ok);
     }
     /* Not necessary to check EINVAL. The signal used is hardcoded and this error cannot happen */
-    sprintf(trace, "%s | The target process exists", __func__);
-    diag_info(trace);
+    else{
+        sprintf(trace, "%s | The target process exists", __func__);
+        diag_info(trace);
+    }
+
     return is_ok;
 }
 
@@ -69,8 +72,8 @@ CHAR* get_maps_path(PID target)
     INT bytes_needed = MIN_BYTES_MAPS_STR + pid_digits;
     CHAR *path = malloc(bytes_needed);   /* /proc/$PID/maps */
 
-    is_ok = snprintf(path, bytes_needed, "/proc/%d/maps", target);  /* snprintf writes terminating null-byte */
-    if(is_ok != ERR_OK)
+    INT size_written = snprintf(path, bytes_needed, "/proc/%d/maps", target);  /* snprintf writes terminating null-byte */
+    if(size_written < 0)
     {
         is_ok = ERR_GENERIC;
         sprintf(trace, "%s | Cannot create maps file path!", __func__);
@@ -90,8 +93,8 @@ CHAR* get_mem_path(PID target)
     INT bytes_needed = MIN_BYTES_MEM_STR + pid_digits;
     CHAR *path = malloc(bytes_needed);   /* /proc/$PID/mem */
 
-    is_ok = snprintf(path, bytes_needed, "/proc/%d/mem", target);  /* snprintf writes terminating null-byte */
-    if(is_ok != ERR_OK)
+    INT size_written = snprintf(path, bytes_needed, "/proc/%d/mem", target);  /* snprintf writes terminating null-byte */
+    if(size_written < 0)
     {
         is_ok = ERR_GENERIC;
         sprintf(trace, "%s | Cannot create mem file path!", __func__);

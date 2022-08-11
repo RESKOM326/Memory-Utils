@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef _MU_SCAN_UTILS
-#define _MU_SCAN_UTILS
+#ifndef _MU_UTILS
+#define _MU_UTILS
 
 #include "mu_types.h"
 
@@ -40,4 +40,4 @@ extern CHAR* get_maps_path(PID target);
  */
 extern CHAR* get_mem_path(PID target);
 
-#endif  /* _MU_SCAN_UTILS */
+#endif  /* _MU_UTILS */

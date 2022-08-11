@@ -1,5 +1,5 @@
 # Compiler
-CC 				=	gcc
+CC				=	gcc
 
 # Flags
 CFLAGS			=	-Wall -Wextra -Wformat -g
@@ -12,13 +12,13 @@ DIR_BLD 		= 	../bld
 
 # ==================================================
 
-DEPENDENCY 		=	$(DIR_BLD)/mu_scan_utils.o $(DIR_BLD)/mu_diag.o
+DEPENDENCY 		=	$(DIR_BLD)/mu_utils.o $(DIR_BLD)/mu_diag.o
 INCLUDEDIR		=	-I$(DIR_SRC)/inc
 
 default:	scanner tests cleanobj
 
 scanner:
-			$(CC) $(CFLAGS) $(INCLUDEDIR) -c -o $(DIR_BLD)/mu_scan_utils.o $(DIR_SRC)/mu_scan_utils.c
+			$(CC) $(CFLAGS) $(INCLUDEDIR) -c -o $(DIR_BLD)/mu_utils.o $(DIR_SRC)/mu_utils.c
 			$(CC) $(CFLAGS) $(INCLUDEDIR) -c -o $(DIR_BLD)/mu_diag.o $(DIR_SRC)/mu_diag.c
 
 tests:
