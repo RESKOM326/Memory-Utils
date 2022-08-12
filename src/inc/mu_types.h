@@ -51,6 +51,7 @@ typedef enum error_codes
     ERR_OK          =   0,          /* No error */
     ERR_EPERM       =   100,        /* pid_exists -> No permissions */
     ERR_ESRCH       =   101,        /* pid_exists -> Does not exist */
+    ERR_FUNC_OPT    =   102,        /* get_memory_chunks -> Wrong argument option */
     ERR_GENERIC     =   500         /* Generic error for C/Sys function calls */
 
 } MU_ERROR;
@@ -63,6 +64,7 @@ typedef struct memory_chunk
     BOOL    is_readable;
     BOOL    is_writable;
     BOOL    is_private;
+    CHAR*   chunk_name;
     
 } MU_MEM_CHUNK;
 

@@ -11,6 +11,7 @@
 
 #include "../../src/inc/mu_types.h"
 #include "../../src/inc/mu_utils.h"
+#include "../../src/inc/mu_memchunk.h"
 #include <stdio.h>
 
 MU_ERROR test_pid_exists(PID target)
@@ -59,6 +60,29 @@ MU_ERROR test_combined(PID target)
     return is_ok;
 }
 
+MU_ERROR test_memchunks_all(PID target)
+{
+    MU_ERROR is_ok = ERR_OK;
+    INT size = 0;
+    MU_MEM_CHUNK *chunks = get_memory_chunks(target, 0, &size);
+    
+    if(chunks == NULL)
+    {
+        is_ok = ERR_GENERIC;
+    }
+    else{
+        for(int i = 0; i < size; i++)
+        {
+            MU_MEM_CHUNK chunk = chunks[i];
+            printf("CHUNK %d | Start Addr: %ld, Size: %ld, R: %d, W: %d, P: %d, Name: %s\n", i,
+            chunk.addr_start, chunk.chunk_size, chunk.is_readable, chunk.is_writable, chunk.is_private, chunk.chunk_name);
+        }
+        free(chunks);
+    }
+
+    return is_ok;
+}
+
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 INT main(INT argc, CHAR **argv)
 {
@@ -67,6 +91,8 @@ INT main(INT argc, CHAR **argv)
     printf("RUN TEST GET_MAPS:\t%d\n\n", test_get_paths(target, 0));
     printf("RUN TEST GET_MEM:\t%d\n\n", test_get_paths(target, 1));
     printf("RUN TEST COMBINED:\t%d\n\n", test_combined(target));
+    printf("***************************************************\n");
+    printf("RUN TEST GET_MEM_CHNKS_ALL:\t%d\n\n", test_memchunks_all(target));
 
     return EXIT_SUCCESS;
 }

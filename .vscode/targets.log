@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Aug 11 21:46:57 2022
+# Make data base, printed on Fri Aug 12 12:55:44 2022
 
 # Variables
 
@@ -51,7 +51,7 @@ XDG_CONFIG_DIRS = /etc/xdg/xdg-xubuntu:/etc/xdg:/etc/xdg
 # environment
 GTK_OVERLAY_SCROLLING = 0
 # environment
-STARSHIP_SESSION_KEY = 8972063332307237
+STARSHIP_SESSION_KEY = 1394855068619614
 # automatic
 @F = $(notdir $@)
 # 'override' directive
@@ -65,11 +65,11 @@ DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-c2bf8b3c-6936-40b6-9bb2-1d7897408b8f.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-7e0f6891-002e-4a97-95dd-512e8b81b4ea.sock
 # environment
 LC_NAME = es_ES.UTF-8
 # environment
-VSCODE_CWD = /home/reskom326-lx/repos/Memory-Utils/integration
+VSCODE_CWD = /home/reskom326-lx/repos/Memory-Utils
 # environment
 XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session0
 # default
@@ -79,11 +79,11 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/reskom326lx-Pulse-GL76-11UEK:@/tmp/.ICE-unix/1073,unix/reskom326lx-Pulse-GL76-11UEK:/tmp/.ICE-unix/1073
+SESSION_MANAGER = local/reskom326lx-Pulse-GL76-11UEK:@/tmp/.ICE-unix/1110,unix/reskom326lx-Pulse-GL76-11UEK:/tmp/.ICE-unix/1110
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
-WINDOWID = 62914563
+WINDOWID = 60817411
 # makefile
 MAKEFILE_LIST := 
 # environment
@@ -117,7 +117,7 @@ QT_QPA_PLATFORMTHEME = gtk2
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 1150
+SSH_AGENT_PID = 1200
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = XFCE
 # environment
@@ -131,7 +131,7 @@ VSCODE_CODE_CACHE_PATH = /home/reskom326-lx/.config/Code/CachedData/f80445acd5a3
 # environment
 LOGNAME = reskom326-lx
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # automatic
 +F = $(notdir $+)
 # environment
@@ -227,11 +227,10 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 1791
+VSCODE_PID = 1800
 # environment
 STARSHIP_SHELL = fish
 # variable set hash-table stats:
- 
 # Load=109/1024=11%, Rehash=0, Collisions=16/131=12%
 
 # Pattern-specific Variable Values
@@ -298,6 +297,6 @@ GNUmakefile:
 # strcache performance: lookups = 21 / hit rate = 14%
 # hash-table stats:
 # Load=18/8192=0%, Rehash=0, Collisions=1/21=5%
-# Finished Make data base on Thu Aug 11 21:46:57 2022
+# Finished Make data base on Fri Aug 12 12:55:44 2022
 
  

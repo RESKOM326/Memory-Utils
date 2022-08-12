@@ -19,8 +19,8 @@
  * 
  * @param path_maps Absolute path of maps file
  * @param option 0 for all chunks, 1 for modifiable chunks
- * @return MU_MEM_CHUNK[] Array with all the memory chunks retrieved
+ * @return MU_MEM_CHUNK[] Array with all the memory chunks retrieved. Null if an user-error occurred
  */
-extern MU_MEM_CHUNK* get_memory_chunks(PID target, INT option);
+extern MU_MEM_CHUNK* get_memory_chunks(PID target, INT option, INT *size);
 
 #endif  /* _MU_MEMCHUNK */
