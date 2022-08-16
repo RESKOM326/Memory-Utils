@@ -15,10 +15,11 @@
 #include "mu_types.h"
 
 /**
- * @brief Get the memory chunks from maps file. REMEMBER TO FREE the memory of the chunks array
+ * @brief Get the memory chunks from maps file. REMEMBER TO FREE the memory of the chunks array and chunk_name attrib
  * 
  * @param path_maps Absolute path of maps file
  * @param option 0 for all chunks, 1 for modifiable chunks
+ * @param size pointer to store the size of the chunks array
  * @return MU_MEM_CHUNK[] Array with all the memory chunks retrieved. Null if an user-error occurred
  */
 extern MU_MEM_CHUNK* get_memory_chunks(PID target, INT option, INT *size);

@@ -74,8 +74,9 @@ MU_ERROR test_memchunks_all(PID target)
         for(int i = 0; i < size; i++)
         {
             MU_MEM_CHUNK chunk = chunks[i];
-            printf("CHUNK %d | Start Addr: %ld, Size: %ld, R: %d, W: %d, P: %d, Name: %s\n", i,
+            printf("CHUNK %-2d | Start Addr: %-19ld, Size: %-7ld, R: %d, W: %d, P: %d, Name: %s\n", i,
             chunk.addr_start, chunk.chunk_size, chunk.is_readable, chunk.is_writable, chunk.is_private, chunk.chunk_name);
+            free(chunk.chunk_name);
         }
         free(chunks);
     }

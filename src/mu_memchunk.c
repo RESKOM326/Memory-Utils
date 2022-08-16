@@ -22,7 +22,8 @@
 #define MODIFIABLE_CHUNKS   1
 #define LINE_BUFFER         256
 #define IS_MODIFIABLE(chnk) (chnk.is_readable && chnk.is_writable && chnk.is_private)
-#define REQ_MATCHES         7
+#define REQ_MATCHES         6
+#define OFFSET_CHNK_NAME    73
 
 /**
  * @brief Parses a line from the maps file. REMEMBER TO FREE returned chunk
@@ -32,19 +33,24 @@
  */
 static MU_MEM_CHUNK parse_maps_line(CHAR* maps_line)
 {
+    diag_trace trace;
+    MU_ERROR is_ok = ERR_OK;
     regex_t regex;
     MU_MEM_CHUNK chunk;
-    // const CHAR *re = "([0-9A-Fa-f]+)-([0-9A-Fa-f]+) ([-r])([-w])[-x]([sp]).*";
-    const CHAR *re = "([0-9A-Fa-f]+)-([0-9A-Fa-f]+) ([-r])([-w])[-x]([sp]) \\d+ \\d+:\\d+ \\d+\\s+(.*)";
+    const CHAR *re = "([0-9A-Fa-f]+)-([0-9A-Fa-f]+) ([-r])([-w])[-x]([sp]).*";
+
     if(regcomp(&regex, re, REG_EXTENDED) != 0){
-        fprintf(stderr, "Error compiling regular expression\n");
-        // critical error
+        is_ok = ERR_GENERIC;
+        sprintf(trace, "%s | Error compiling regular expression!", __func__);
+        diag_critical(trace, is_ok);
+        exit(is_ok);
     }
-    printf("D\n");
     regmatch_t matches[REQ_MATCHES]; 
     if(regexec(&regex, maps_line, REQ_MATCHES, matches, 0) != 0){
-        fprintf(stderr, "Error in memory map line format\n");
-        // critical error
+        is_ok = ERR_GENERIC;
+        sprintf(trace, "%s | Error in memory map line format!", __func__);
+        diag_critical(trace, is_ok);
+        exit(is_ok);
     }
 
     /* Get starting chunk memory address */
@@ -68,12 +74,19 @@ static MU_MEM_CHUNK parse_maps_line(CHAR* maps_line)
     memcpy(p, maps_line + matches[5].rm_so, matches[5].rm_eo - matches[5].rm_so);
 
     /* Get name of the region */
-
-    // INT sz = strlen(maps_line) - 73;
-    // chunk.chunk_name = malloc(sz+1);
-    // memcpy(chunk.chunk_name, &maps_line[72], sz);
-    chunk.chunk_name = malloc(matches[6].rm_eo - matches[6].rm_so + 1); 
-    memcpy(chunk.chunk_name, maps_line + matches[6].rm_so, matches[6].rm_eo - matches[6].rm_so);
+    INT sz = matches[0].rm_eo - matches[0].rm_so;
+    if(sz > OFFSET_CHNK_NAME)
+    {
+        sz = matches[0].rm_eo - OFFSET_CHNK_NAME;
+        chunk.chunk_name = malloc(sz + 1);
+        memcpy(chunk.chunk_name, maps_line + OFFSET_CHNK_NAME, sz - 1);
+    }
+    else
+    {
+        INT to_reserve = 4; /* "NULL has 4 bytes" */
+        chunk.chunk_name = malloc(to_reserve + 1);
+        memcpy(chunk.chunk_name, "NULL", to_reserve);
+    }
 
     INT64 addr_start = (INT64) strtoll(start, NULL, 16);
     INT64 addr_end = (INT64) strtoll(end, NULL, 16);
@@ -83,17 +96,17 @@ static MU_MEM_CHUNK parse_maps_line(CHAR* maps_line)
     BOOL writable = w[0] == 'w';
     BOOL priv = p[0] == 'p';
 
-    /* MU_MEM_CHUNK chunk = malloc(sizeof(MU_MEM_CHUNK)); */
-    chunk.addr_start = addr_end; chunk.chunk_size = size; chunk.is_readable = readable;
-    chunk.is_writable = writable; chunk.is_private = priv;
-    // chunk.chunk_name = strdup(c);
+    chunk.addr_start = addr_end; 
+    chunk.chunk_size = size; 
+    chunk.is_readable = readable;
+    chunk.is_writable = writable; 
+    chunk.is_private = priv;
 
     free(start);
     free(end);
     free(r);
     free(w);
     free(p);
-    // free(c);
 
     return chunk;
 }
@@ -103,6 +116,7 @@ MU_MEM_CHUNK* get_memory_chunks(PID target, INT option, INT *size)
     diag_trace trace;
     MU_ERROR is_ok = ERR_OK;
     MU_MEM_CHUNK *chunks;
+
     if(option != ALL_CHUNKS && option != MODIFIABLE_CHUNKS)
     {
         is_ok = ERR_FUNC_OPT;
@@ -143,7 +157,6 @@ MU_MEM_CHUNK* get_memory_chunks(PID target, INT option, INT *size)
                     exit(is_ok);
                 }
                 chunks[n_chunks++] = chunk;
-                free(chunk.chunk_name);
             }
         }
         /* Only modifiable chunks. At this point only the MODIFIABLE option is possible */
@@ -164,7 +177,6 @@ MU_MEM_CHUNK* get_memory_chunks(PID target, INT option, INT *size)
                     }
                     chunks[n_chunks++] = chunk;
                 }
-                free(chunk.chunk_name);
             }
         }
         /* Update size and liberate resources */

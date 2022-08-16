@@ -25,6 +25,7 @@ MU_ERROR pid_exists(PID target)
     MU_ERROR is_ok = ERR_OK;
     diag_trace trace;
     kill(target, CHECK_EXISTENCE_AND_PERMS);
+
     if(errno == EPERM)
     {
         is_ok = ERR_EPERM;
@@ -55,6 +56,7 @@ MU_ERROR pid_exists(PID target)
 static INT get_pid_digits(PID target)
 {
     INT pid_digits = 0;
+
     while(target != 0)
     {
         target = target/10;
@@ -73,6 +75,7 @@ CHAR* get_maps_path(PID target)
     CHAR *path = malloc(bytes_needed);   /* /proc/$PID/maps */
 
     INT size_written = snprintf(path, bytes_needed, "/proc/%d/maps", target);  /* snprintf writes terminating null-byte */
+    
     if(size_written < 0)
     {
         is_ok = ERR_GENERIC;
