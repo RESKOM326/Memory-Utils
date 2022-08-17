@@ -15,6 +15,7 @@
 #include "inc/mu_diag.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <regex.h>
 
@@ -77,15 +78,17 @@ static MU_MEM_CHUNK parse_maps_line(CHAR* maps_line)
     INT sz = matches[0].rm_eo - matches[0].rm_so;
     if(sz > OFFSET_CHNK_NAME)
     {
-        sz = matches[0].rm_eo - OFFSET_CHNK_NAME;
+        sz = matches[0].rm_eo - OFFSET_CHNK_NAME - 1;
         chunk.chunk_name = malloc(sz + 1);
-        memcpy(chunk.chunk_name, maps_line + OFFSET_CHNK_NAME, sz - 1);
+        memcpy(chunk.chunk_name, maps_line + OFFSET_CHNK_NAME, sz);
+        chunk.chnk_name_sz = sz;
     }
     else
     {
         INT to_reserve = 4; /* "NULL has 4 bytes" */
         chunk.chunk_name = malloc(to_reserve + 1);
         memcpy(chunk.chunk_name, "NULL", to_reserve);
+        chunk.chnk_name_sz = to_reserve;
     }
 
     INT64 addr_start = (INT64) strtoll(start, NULL, 16);
@@ -186,4 +189,24 @@ MU_MEM_CHUNK* get_memory_chunks(PID target, INT option, INT *size)
     }
 
     return chunks;
+}
+
+MU_MEM_CHUNK* filter_memory_chunks(PID target, MU_MEM_CHUNK *chunks, INT *size)
+{
+    diag_trace trace;
+    MU_ERROR is_ok = ERR_OK;
+    CHAR *exe_path = get_exe_path(target);
+    CHAR buffer[LINE_BUFFER];
+
+    INT sz = readlink(exe_path, buffer, LINE_BUFFER);
+    
+    if(sz < 0)
+    {
+        is_ok = ERR_GENERIC;
+        sprintf(trace, "%s | Cannot get absolute path of the target binary!", __func__);
+        diag_critical(trace, is_ok);
+        exit(is_ok);
+    }
+
+    return NULL;
 }

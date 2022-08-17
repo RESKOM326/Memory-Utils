@@ -65,6 +65,7 @@ typedef struct memory_chunk
     BOOL    is_writable;
     BOOL    is_private;
     CHAR*   chunk_name;
+    ULONG   chnk_name_sz;
     
 } MU_MEM_CHUNK;
 

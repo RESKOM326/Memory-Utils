@@ -22,7 +22,9 @@ MU_ERROR test_pid_exists(PID target)
 MU_ERROR test_get_paths(PID target, INT option)
 {
     MU_ERROR is_ok = ERR_OK;
-    CHAR *path = (option == 0) ? get_maps_path(target) : get_mem_path(target);
+
+    /* Options: 0 for maps, 1 for mem, 2 for exe */
+    CHAR *path = (option == 0) ? get_maps_path(target) : (option == 1) ? get_mem_path(target) : get_exe_path(target);
     if(path == NULL)
     {
         is_ok = ERR_GENERIC;
@@ -44,7 +46,8 @@ MU_ERROR test_combined(PID target)
     {
         CHAR *path_maps = get_maps_path(target);
         CHAR *path_mem = get_mem_path(target);
-        if(path_maps == NULL || path_mem == NULL)
+        CHAR *path_exe = get_exe_path(target);
+        if(path_maps == NULL || path_mem == NULL || path_exe == NULL)
         {
             is_ok = ERR_GENERIC;
         }
@@ -52,19 +55,21 @@ MU_ERROR test_combined(PID target)
         {
             printf("%s - %s\n", __func__, path_maps);
             printf("%s - %s\n", __func__, path_mem);
+            printf("%s - %s\n", __func__, path_exe);
         }
         free(path_maps);
         free(path_mem);
+        free(path_exe);
     }
 
     return is_ok;
 }
 
-MU_ERROR test_memchunks_all(PID target)
+MU_ERROR test_memchunks(PID target, INT option)
 {
     MU_ERROR is_ok = ERR_OK;
     INT size = 0;
-    MU_MEM_CHUNK *chunks = get_memory_chunks(target, 0, &size);
+    MU_MEM_CHUNK *chunks = get_memory_chunks(target, option, &size);
     
     if(chunks == NULL)
     {
@@ -74,8 +79,10 @@ MU_ERROR test_memchunks_all(PID target)
         for(int i = 0; i < size; i++)
         {
             MU_MEM_CHUNK chunk = chunks[i];
-            printf("CHUNK %-2d | Start Addr: %-19ld, Size: %-7ld, R: %d, W: %d, P: %d, Name: %s\n", i,
-            chunk.addr_start, chunk.chunk_size, chunk.is_readable, chunk.is_writable, chunk.is_private, chunk.chunk_name);
+            printf("CHUNK %-2d | Start Addr: %-19ld, Size: %-7ld, R: %d, W: %d, P: %d, Name: %s (%ld)\n", i,
+            chunk.addr_start, chunk.chunk_size, chunk.is_readable, chunk.is_writable,
+            chunk.is_private, chunk.chunk_name, chunk.chnk_name_sz);
+            // printf(" (%ld)\n", chunk.chnk_name_sz);
             free(chunk.chunk_name);
         }
         free(chunks);
@@ -84,6 +91,7 @@ MU_ERROR test_memchunks_all(PID target)
     return is_ok;
 }
 
+
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 INT main(INT argc, CHAR **argv)
 {
@@ -91,9 +99,11 @@ INT main(INT argc, CHAR **argv)
     printf("RUN TEST PID_EXISTS:\t%d\n\n", test_pid_exists(target));
     printf("RUN TEST GET_MAPS:\t%d\n\n", test_get_paths(target, 0));
     printf("RUN TEST GET_MEM:\t%d\n\n", test_get_paths(target, 1));
+    printf("RUN TEST GET_EXE:\t%d\n\n", test_get_paths(target, 2));
     printf("RUN TEST COMBINED:\t%d\n\n", test_combined(target));
     printf("***************************************************\n");
-    printf("RUN TEST GET_MEM_CHNKS_ALL:\t%d\n\n", test_memchunks_all(target));
+    printf("RUN TEST GET_MEM_CHNKS_ALL:\t%d\n\n", test_memchunks(target, 0));
+    printf("RUN TEST GET_MEM_CHNKS_MOD:\t%d\n\n", test_memchunks(target, 1));
 
     return EXIT_SUCCESS;
 }

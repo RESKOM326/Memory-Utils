@@ -19,9 +19,18 @@
  * 
  * @param path_maps Absolute path of maps file
  * @param option 0 for all chunks, 1 for modifiable chunks
- * @param size pointer to store the size of the chunks array
- * @return MU_MEM_CHUNK[] Array with all the memory chunks retrieved. Null if an user-error occurred
+ * @param size Pointer to store the size of the chunks array
+ * @return MU_MEM_CHUNK[] Array with the memory chunks retrieved. Null if an user-error occurred
  */
 extern MU_MEM_CHUNK* get_memory_chunks(PID target, INT option, INT *size);
+
+/**
+ * @brief Filters the memory chunks by region. Retrieves only Stack (for now)
+ * 
+ * @param chunks Chunks which to apply filter
+ * @param size Pointer to store the size of the filtered chunks array
+ * @return MU_MEM_CHUNK[] Array with the memory chunks retrieved after filter. Null if an user-error occurred
+ */
+extern MU_MEM_CHUNK* filter_memory_chunks(PID target, MU_MEM_CHUNK *chunks, INT *size);
 
 #endif  /* _MU_MEMCHUNK */

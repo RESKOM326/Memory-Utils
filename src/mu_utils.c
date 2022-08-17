@@ -16,9 +16,9 @@
 #include <errno.h>
 #include <stdio.h>
 
-#define CHECK_EXISTENCE_AND_PERMS   0
-#define MIN_BYTES_MAPS_STR          12
-#define MIN_BYTES_MEM_STR           11
+#define CHECK_EXISTENCE_AND_PERMS       0
+#define MIN_BYTES_MAPS_STR              12
+#define MIN_BYTES_MEM_EXE_STR           11
 
 MU_ERROR pid_exists(PID target)
 {
@@ -81,7 +81,7 @@ CHAR* get_maps_path(PID target)
         is_ok = ERR_GENERIC;
         sprintf(trace, "%s | Cannot create maps file path!", __func__);
         diag_critical(trace, is_ok);
-        path = NULL;
+        exit(is_ok);
     }
 
     return path;
@@ -93,7 +93,7 @@ CHAR* get_mem_path(PID target)
     diag_trace trace;
 
     INT pid_digits = get_pid_digits(target);
-    INT bytes_needed = MIN_BYTES_MEM_STR + pid_digits;
+    INT bytes_needed = MIN_BYTES_MEM_EXE_STR + pid_digits;
     CHAR *path = malloc(bytes_needed);   /* /proc/$PID/mem */
 
     INT size_written = snprintf(path, bytes_needed, "/proc/%d/mem", target);  /* snprintf writes terminating null-byte */
@@ -102,7 +102,27 @@ CHAR* get_mem_path(PID target)
         is_ok = ERR_GENERIC;
         sprintf(trace, "%s | Cannot create mem file path!", __func__);
         diag_critical(trace, is_ok);
-        path = NULL;
+        exit(is_ok);
     }
     return path;
+}
+
+CHAR* get_exe_path(PID target)
+{
+    MU_ERROR is_ok = ERR_OK;
+    diag_trace trace;
+
+    INT pid_digits = get_pid_digits(target);
+    INT bytes_needed = MIN_BYTES_MEM_EXE_STR + pid_digits;
+    CHAR *path = malloc(bytes_needed);   /* /proc/$PID/exe */
+
+    INT size_written = snprintf(path, bytes_needed, "/proc/%d/exe", target);  /* snprintf writes terminating null-byte */
+    if(size_written < 0)
+    {
+        is_ok = ERR_GENERIC;
+        sprintf(trace, "%s | Cannot create exe file path!", __func__);
+        diag_critical(trace, is_ok);
+        exit(is_ok);
+    }
+    return path;  
 }

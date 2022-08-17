@@ -26,7 +26,7 @@ tests:
 			$(CC) $(CFLAGS) $(INCLUDEDIR) -o $(DIR_BLD)/test1 $(DIR_TST)/test1.c $(DEPENDENCY)
 
 simulator:
-			$(CC) -o $(DIR_BLD)/sim $(DIR_TST)/sim.c 
+			$(CC) -o $(DIR_BLD)/simulator $(DIR_TST)/simulator.c 
 
 cleanobj:
 			rm -rf $(DIR_BLD)/*.o

@@ -1,0 +1,52 @@
+INFO: pid_exists | The target process exists
+INFO: pid_exists | The target process exists
+RUN TEST PID_EXISTS:	0
+
+test_get_paths - /proc/14337/maps
+RUN TEST GET_MAPS:	0
+
+test_get_paths - /proc/14337/mem
+RUN TEST GET_MEM:	0
+
+test_get_paths - /proc/14337/exe
+RUN TEST GET_EXE:	0
+
+test_combined - /proc/14337/maps
+test_combined - /proc/14337/mem
+test_combined - /proc/14337/exe
+RUN TEST COMBINED:	0
+
+***************************************************
+CHUNK 0  | Start Addr: 93862201974784     , Size: 4096   , R: 1, W: 0, P: 1, Name: /home/reskom326-lx/repos/Memory-Utils/bld/simulator (deleted) (61)
+CHUNK 1  | Start Addr: 93862201978880     , Size: 4096   , R: 1, W: 0, P: 1, Name: /home/reskom326-lx/repos/Memory-Utils/bld/simulator (deleted) (61)
+CHUNK 2  | Start Addr: 93862201982976     , Size: 4096   , R: 1, W: 0, P: 1, Name: /home/reskom326-lx/repos/Memory-Utils/bld/simulator (deleted) (61)
+CHUNK 3  | Start Addr: 93862201987072     , Size: 4096   , R: 1, W: 0, P: 1, Name: /home/reskom326-lx/repos/Memory-Utils/bld/simulator (deleted) (61)
+CHUNK 4  | Start Addr: 93862201991168     , Size: 4096   , R: 1, W: 1, P: 1, Name: /home/reskom326-lx/repos/Memory-Utils/bld/simulator (deleted) (61)
+CHUNK 5  | Start Addr: 93862235504640     , Size: 135168 , R: 1, W: 1, P: 1, Name: [heap] (6)
+CHUNK 6  | Start Addr: 140657938382848    , Size: 139264 , R: 1, W: 0, P: 1, Name: /usr/lib/x86_64-linux-gnu/libc-2.31.so (38)
+CHUNK 7  | Start Addr: 140657939922944    , Size: 1540096, R: 1, W: 0, P: 1, Name: /usr/lib/x86_64-linux-gnu/libc-2.31.so (38)
+CHUNK 8  | Start Addr: 140657940242432    , Size: 319488 , R: 1, W: 0, P: 1, Name: /usr/lib/x86_64-linux-gnu/libc-2.31.so (38)
+CHUNK 9  | Start Addr: 140657940258816    , Size: 16384  , R: 1, W: 0, P: 1, Name: /usr/lib/x86_64-linux-gnu/libc-2.31.so (38)
+CHUNK 10 | Start Addr: 140657940267008    , Size: 8192   , R: 1, W: 1, P: 1, Name: /usr/lib/x86_64-linux-gnu/libc-2.31.so (38)
+CHUNK 11 | Start Addr: 140657940291584    , Size: 24576  , R: 1, W: 1, P: 1, Name: NULL (4)
+CHUNK 12 | Start Addr: 140657940381696    , Size: 4096   , R: 1, W: 0, P: 1, Name: /usr/lib/x86_64-linux-gnu/ld-2.31.so (36)
+CHUNK 13 | Start Addr: 140657940525056    , Size: 143360 , R: 1, W: 0, P: 1, Name: /usr/lib/x86_64-linux-gnu/ld-2.31.so (36)
+CHUNK 14 | Start Addr: 140657940557824    , Size: 32768  , R: 1, W: 0, P: 1, Name: /usr/lib/x86_64-linux-gnu/ld-2.31.so (36)
+CHUNK 15 | Start Addr: 140657940566016    , Size: 4096   , R: 1, W: 0, P: 1, Name: /usr/lib/x86_64-linux-gnu/ld-2.31.so (36)
+CHUNK 16 | Start Addr: 140657940570112    , Size: 4096   , R: 1, W: 1, P: 1, Name: /usr/lib/x86_64-linux-gnu/ld-2.31.so (36)
+CHUNK 17 | Start Addr: 140657940574208    , Size: 4096   , R: 1, W: 1, P: 1, Name: NULL (4)
+CHUNK 18 | Start Addr: 140730004348928    , Size: 135168 , R: 1, W: 1, P: 1, Name: [stack] (7)
+CHUNK 19 | Start Addr: 140730004623360    , Size: 16384  , R: 1, W: 0, P: 1, Name: [vvar] (6)
+CHUNK 20 | Start Addr: 140730004631552    , Size: 8192   , R: 1, W: 0, P: 1, Name: [vdso] (6)
+CHUNK 21 | Start Addr: 9223372036854775807, Size: 0      , R: 0, W: 0, P: 1, Name: [vsyscall] (10)
+RUN TEST GET_MEM_CHNKS_ALL:	0
+
+CHUNK 0  | Start Addr: 93862201991168     , Size: 4096   , R: 1, W: 1, P: 1, Name: /home/reskom326-lx/repos/Memory-Utils/bld/simulator (deleted) (61)
+CHUNK 1  | Start Addr: 93862235504640     , Size: 135168 , R: 1, W: 1, P: 1, Name: [heap] (6)
+CHUNK 2  | Start Addr: 140657940267008    , Size: 8192   , R: 1, W: 1, P: 1, Name: /usr/lib/x86_64-linux-gnu/libc-2.31.so (38)
+CHUNK 3  | Start Addr: 140657940291584    , Size: 24576  , R: 1, W: 1, P: 1, Name: NULL (4)
+CHUNK 4  | Start Addr: 140657940570112    , Size: 4096   , R: 1, W: 1, P: 1, Name: /usr/lib/x86_64-linux-gnu/ld-2.31.so (36)
+CHUNK 5  | Start Addr: 140657940574208    , Size: 4096   , R: 1, W: 1, P: 1, Name: NULL (4)
+CHUNK 6  | Start Addr: 140730004348928    , Size: 135168 , R: 1, W: 1, P: 1, Name: [stack] (7)
+RUN TEST GET_MEM_CHNKS_MOD:	0
+
