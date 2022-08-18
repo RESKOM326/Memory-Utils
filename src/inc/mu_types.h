@@ -59,7 +59,7 @@ typedef enum error_codes
 /* struct to store information about a memory chunk */
 typedef struct memory_chunk
 {
-    INT64   addr_start;
+    ULONG   addr_start;
     ULONG   chunk_size;
     BOOL    is_readable;
     BOOL    is_writable;

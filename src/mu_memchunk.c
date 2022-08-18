@@ -10,7 +10,6 @@
  */
 
 #include "inc/mu_memchunk.h"
-#include "inc/mu_types.h"
 #include "inc/mu_utils.h"
 #include "inc/mu_diag.h"
 #include <stdio.h>
@@ -91,15 +90,15 @@ static MU_MEM_CHUNK parse_maps_line(CHAR* maps_line)
         chunk.chnk_name_sz = to_reserve;
     }
 
-    INT64 addr_start = (INT64) strtoll(start, NULL, 16);
-    INT64 addr_end = (INT64) strtoll(end, NULL, 16);
-    ULONG size = (ULONG) (addr_end - addr_start);
+    ULONG addr_start = (ULONG) strtoll(start, NULL, 16);
+    ULONG addr_end = (ULONG) strtoll(end, NULL, 16);
+    ULONG size = addr_end - addr_start;
 
     BOOL readable = r[0] == 'r';
     BOOL writable = w[0] == 'w';
     BOOL priv = p[0] == 'p';
 
-    chunk.addr_start = addr_end; 
+    chunk.addr_start = addr_start; 
     chunk.chunk_size = size; 
     chunk.is_readable = readable;
     chunk.is_writable = writable; 
