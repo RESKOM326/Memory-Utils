@@ -196,11 +196,19 @@ MU_MEM_CHUNK* filter_memory_chunks(PID target, MU_MEM_CHUNK *chunks, INT *size)
     diag_trace trace;
     MU_ERROR is_ok = ERR_OK;
     CHAR *exe_path = get_exe_path(target);
-    CHAR buffer[LINE_BUFFER];
+    CHAR exec_name[LINE_BUFFER];
+    INT n_filtered = 0;
 
-    INT sz = readlink(exe_path, buffer, LINE_BUFFER);
+    MU_MEM_CHUNK *filtered;
+    /* Reserve memory for at least one chunk */
+    filtered = malloc(sizeof(*filtered)*(n_filtered + 1));
+
+    const CHAR *HEAP = "[heap]";
+    const CHAR *STACK = "[stack]";
+
+    INT ret_val = readlink(exe_path, exec_name, LINE_BUFFER);
     
-    if(sz < 0)
+    if(ret_val < 0)
     {
         is_ok = ERR_GENERIC;
         sprintf(trace, "%s | Cannot get absolute path of the target binary!", __func__);
@@ -208,5 +216,25 @@ MU_MEM_CHUNK* filter_memory_chunks(PID target, MU_MEM_CHUNK *chunks, INT *size)
         exit(is_ok);
     }
 
-    return NULL;
+    /* Print only chunks EXEC, HEAP and STACK */
+    for(int i = 0; i < *size; i++)
+    {
+        if( !strncmp(exec_name, chunks[i].chunk_name, chunks[i].chnk_name_sz) ||
+            !strncmp(HEAP,      chunks[i].chunk_name, chunks[i].chnk_name_sz) ||
+            !strncmp(STACK,     chunks[i].chunk_name, chunks[i].chnk_name_sz))
+        {
+            filtered = realloc(filtered, ((sizeof(*filtered))*(n_filtered + 1)));
+            if(filtered == NULL)
+            {
+                is_ok = ERR_GENERIC;
+                sprintf(trace, "%s | Cannot reserve more dynamic memory!", __func__);
+                diag_critical(trace, is_ok);
+                exit(is_ok);
+            }
+            filtered[n_filtered++] = chunks[i];
+        }
+    }
+    *size = n_filtered;
+
+    return filtered;
 }

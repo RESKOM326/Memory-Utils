@@ -82,10 +82,38 @@ MU_ERROR test_memchunks(PID target, INT option)
             printf("CHUNK %-2d | Start Addr: %-19ld, Size: %-7ld, R: %d, W: %d, P: %d, Name: %s (%ld)\n", i,
             chunk.addr_start, chunk.chunk_size, chunk.is_readable, chunk.is_writable,
             chunk.is_private, chunk.chunk_name, chunk.chnk_name_sz);
-            // printf(" (%ld)\n", chunk.chnk_name_sz);
+
             free(chunk.chunk_name);
         }
         free(chunks);
+    }
+
+    return is_ok;
+}
+
+MU_ERROR test_filter_chunks(PID target, INT option)
+{
+    MU_ERROR is_ok = ERR_OK;
+    INT size = 0;
+    MU_MEM_CHUNK *chunks = get_memory_chunks(target, option, &size);
+    MU_MEM_CHUNK *filtered = filter_memory_chunks(target, chunks, &size);
+    
+    if(filtered == NULL)
+    {
+        is_ok = ERR_GENERIC;
+    }
+    else
+    {
+        for(int i = 0; i < size; i++)
+        {
+            MU_MEM_CHUNK chunk = filtered[i];
+            printf("CHUNK %-2d | Start Addr: %-19ld, Size: %-7ld, R: %d, W: %d, P: %d, Name: %s (%ld)\n", i,
+            chunk.addr_start, chunk.chunk_size, chunk.is_readable, chunk.is_writable,
+            chunk.is_private, chunk.chunk_name, chunk.chnk_name_sz);
+
+            free(chunk.chunk_name);
+        }
+        free(filtered);
     }
 
     return is_ok;
@@ -104,6 +132,8 @@ INT main(INT argc, CHAR **argv)
     printf("***************************************************\n");
     printf("RUN TEST GET_MEM_CHNKS_ALL:\t%d\n\n", test_memchunks(target, 0));
     printf("RUN TEST GET_MEM_CHNKS_MOD:\t%d\n\n", test_memchunks(target, 1));
+    printf("RUN TEST FILTER_ALL_CHUNKS:\t%d\n\n", test_filter_chunks(target, 0));
+    printf("RUN TEST FILTER_MOD_CHUNKS:\t%d\n\n", test_filter_chunks(target, 1));
 
     return EXIT_SUCCESS;
 }
