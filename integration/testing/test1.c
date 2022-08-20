@@ -13,7 +13,24 @@
 #include "../../src/inc/mu_utils.h"
 #include "../../src/inc/mu_memchunk.h"
 #include "../../src/inc/mu_io.h"
+#include "../../src/inc/mu_scanner.h"
 #include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <time.h>
+
+#define ALL_CHUNKS      0
+#define MOD_CHUNKS      1
+
+#define OPT_MAPS        0
+#define OPT_MEM         1
+#define OPT_EXE         2
+
+#define ALG_BOYER_MOORE 0
+#define ALG_GNU_MEMMEM  1
+#define ALG_MEMMEM_MTH  2
+
+#define BILLION         1000000000.0
 
 MU_ERROR test_pid_exists(PID target)
 {
@@ -25,7 +42,7 @@ MU_ERROR test_get_paths(PID target, INT option)
     MU_ERROR is_ok = ERR_OK;
 
     /* Options: 0 for maps, 1 for mem, 2 for exe */
-    CHAR *path = (option == 0) ? get_maps_path(target) : (option == 1) ? get_mem_path(target) : get_exe_path(target);
+    CHAR *path = (option == OPT_MAPS) ? get_maps_path(target) : (option == OPT_MEM) ? get_mem_path(target) : get_exe_path(target);
     if(path == NULL)
     {
         is_ok = ERR_GENERIC;
@@ -154,6 +171,71 @@ MU_ERROR test_read_chunk_data(PID target)
     return is_ok;  
 }
 
+MU_ERROR test_modify_values(PID target)
+{
+    MU_ERROR is_ok = ERR_OK;
+    INT32 new_value = 999999;
+    ULONG addresses[2];
+    addresses[0] = (ULONG) 0x7ffebc3484e8;
+    addresses[1] = (ULONG) 0x7ffebc3484ec;
+    INT size = sizeof(INT32);
+    UCHAR bytes[size];
+    memcpy(bytes, &new_value, size);
+
+    printf("Writing 999999 as new silver and bronze values in the simulator...\n");
+
+    is_ok = modify_values(target, addresses, 2, bytes, size);
+
+    return is_ok;
+}
+
+MU_ERROR test_scanner_and_efficiency(PID target, INT algorithm)
+{
+    MU_ERROR is_ok = ERR_OK;
+    INT16 to_search = 12341;
+    INT size = sizeof(INT16);
+    UCHAR bytes[size];
+    memcpy(bytes, &to_search, size);
+
+    /* Benchmark */
+    struct timespec start;
+    struct timespec end;
+    REAL64 elapsed_time;
+
+    printf("Finding matches of INT16 - 12343...\n");
+
+    INT n_matches = 0;
+    ULONG *matches;
+    if(algorithm == ALG_BOYER_MOORE)
+    {
+        clock_gettime(CLOCK_MONOTONIC, &start);
+        matches = execute_scanner_BM(target, bytes, size, &n_matches);
+        clock_gettime(CLOCK_MONOTONIC, &end);
+    }
+    else if(algorithm == ALG_GNU_MEMMEM)
+    {
+        clock_gettime(CLOCK_MONOTONIC, &start);
+        matches = execute_scanner_STD(target, bytes, size, &n_matches);
+        clock_gettime(CLOCK_MONOTONIC, &end);
+    }
+    else
+    {
+        clock_gettime(CLOCK_MONOTONIC, &start);
+        matches = execute_scanner_STD_MTH(target, bytes, size, &n_matches);
+        clock_gettime(CLOCK_MONOTONIC, &end);        
+    }
+    for(INT i = 0; i < n_matches; i++)
+    {
+        printf("Match %i: %#lx\n", i+1, matches[i]);
+    }
+    free(matches);
+
+    elapsed_time = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / BILLION;
+    printf("ELAPSED TIME: %f\n", elapsed_time);
+
+    return is_ok;   
+}
+
 INT main(INT argc, CHAR **argv)
 {
     if(argc < 2)
@@ -164,19 +246,27 @@ INT main(INT argc, CHAR **argv)
     INT target = atoi(argv[1]);
 
     printf("RUN TEST PID_EXISTS:\t%d\n\n", test_pid_exists(target));
-    printf("RUN TEST GET_MAPS:\t%d\n\n", test_get_paths(target, 0));
-    printf("RUN TEST GET_MEM:\t%d\n\n", test_get_paths(target, 1));
-    printf("RUN TEST GET_EXE:\t%d\n\n", test_get_paths(target, 2));
+    printf("RUN TEST GET_MAPS:\t%d\n\n", test_get_paths(target, OPT_MAPS));
+    printf("RUN TEST GET_MEM:\t%d\n\n", test_get_paths(target, OPT_MEM));
+    printf("RUN TEST GET_EXE:\t%d\n\n", test_get_paths(target, OPT_EXE));
     printf("RUN TEST COMBINED:\t%d\n\n", test_combined(target));
     printf("****************************************************************"
             "****************************************************************\n\n");
-    printf("RUN TEST GET_MEM_CHNKS_ALL:\t%d\n\n", test_memchunks(target, 0));
-    printf("RUN TEST GET_MEM_CHNKS_MOD:\t%d\n\n", test_memchunks(target, 1));
-    printf("RUN TEST FILTER_ALL_CHUNKS:\t%d\n\n", test_filter_chunks(target, 0));
-    printf("RUN TEST FILTER_MOD_CHUNKS:\t%d\n\n", test_filter_chunks(target, 1));
+    printf("RUN TEST GET_MEM_CHNKS_ALL:\t%d\n\n", test_memchunks(target, ALL_CHUNKS));
+    printf("RUN TEST GET_MEM_CHNKS_MOD:\t%d\n\n", test_memchunks(target, MOD_CHUNKS));
+    printf("RUN TEST FILTER_ALL_CHUNKS:\t%d\n\n", test_filter_chunks(target, ALL_CHUNKS));
+    printf("RUN TEST FILTER_MOD_CHUNKS:\t%d\n\n", test_filter_chunks(target, MOD_CHUNKS));
     printf("****************************************************************"
             "****************************************************************\n\n");
     printf("RUN TEST READ_CHUNK_DATA:\t%d\n\n", test_read_chunk_data(target));
+    printf("RUN TEST MODIFY_VALUES:\t%d\n\n", test_modify_values(target));
+    printf("****************************************************************"
+            "****************************************************************\n\n");
+    printf("RUN TEST EXECUTE_SCAN_AND_EFFICIENCY_BM:\t%d\n\n", test_scanner_and_efficiency(target, ALG_BOYER_MOORE));
+    printf("RUN TEST EXECUTE_SCAN_AND_EFFICIENCY_STD:\t%d\n\n", test_scanner_and_efficiency(target, ALG_GNU_MEMMEM));
+    printf("****************************************************************"
+            "****************************************************************\n\n");
+    printf("N_CORES_ONLN: %ld\n", sysconf(_SC_NPROCESSORS_ONLN));
 
     return EXIT_SUCCESS;
 }

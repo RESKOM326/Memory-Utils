@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef _MU_MEMCHUNK
-#define _MU_MEMCHUNK
+#ifndef _MU_MEMCHUNK_H
+#define _MU_MEMCHUNK_H
 
 #include "mu_types.h"
 
@@ -34,4 +34,4 @@ extern MU_MEM_CHUNK* get_memory_chunks(PID target, INT option, INT *size);
  */
 extern MU_MEM_CHUNK* filter_memory_chunks(PID target, MU_MEM_CHUNK *chunks, INT *size);
 
-#endif  /* _MU_MEMCHUNK */
+#endif  /* _MU_MEMCHUNK_H */

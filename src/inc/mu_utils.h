@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef _MU_UTILS
-#define _MU_UTILS
+#ifndef _MU_UTILS_H
+#define _MU_UTILS_H
 
 #include "mu_types.h"
 
@@ -48,4 +48,4 @@ extern CHAR* get_mem_path(PID target);
  */
 extern CHAR* get_exe_path(PID target);
 
-#endif  /* _MU_UTILS */
+#endif  /* _MU_UTILS_H */

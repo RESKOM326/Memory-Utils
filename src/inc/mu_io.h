@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef _MU_IO
-#define _MU_IO
+#ifndef _MU_IO_H
+#define _MU_IO_H
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -28,24 +28,15 @@
 extern UCHAR* read_chunk_data(PID target, MU_MEM_CHUNK chunk);
 
 /**
- * @brief Writes data into a target's memory chunk
- * 
- * @param target PID of the target process
- * @param address Starting memory address 
- * @param data Data to write
- * @return Error code indicating this operation status 
- */
-extern MU_ERROR write_chunk_data(PID target, INT64 address, UCHAR *data);
-
-/**
  * @brief Modifies the final matches with the wanted value
  * 
  * @param target PID of the target process
  * @param addresses Starting memory addresses of the matches
+ * @param addr_size Size of the addresses array
  * @param data Data to write
- * @param size Number of matches to modify
+ * @param size Size in bytes of the data
  * @return Error code indicating this operation status 
  */
-extern MU_ERROR modify_value(PID target, INT64 *addresses, UCHAR *data, INT size);
+extern MU_ERROR modify_values(PID target, ULONG *addresses, INT addr_size, UCHAR *data, INT data_size);
 
-#endif  /* _MU_IO */
+#endif  /* _MU_IO_H */
