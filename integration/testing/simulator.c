@@ -41,9 +41,9 @@ int main(){
             // Newline read
             byte++;
             gold--;
-            silver--;
-            bronze--;
-            health--;
+            silver-=2;
+            bronze-=3;
+            health-=4;
             ratio += 0.5;
             n_newlines++;
         } else{

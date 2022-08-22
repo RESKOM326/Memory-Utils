@@ -64,6 +64,6 @@ extern ULONG* execute_scanner_STD_MTH(PID target, UCHAR *data, INT data_size, IN
  * @param n_matches Stores the number of matching addresses
  * @return MU_ERROR 
  */
-extern MU_ERROR execute_filtering(PID target, ULONG **addresses, UCHAR *data, INT data_size, INT *n_matches);
+extern MU_ERROR execute_filtering(PID target, ULONG **addresses, UCHAR *data, ULONG data_size, INT *n_matches);
 
 #endif  /* _MU_SCANNER_H */

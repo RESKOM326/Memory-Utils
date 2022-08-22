@@ -12,12 +12,15 @@
 #include "inc/mu_scanner.h"
 #include "inc/mu_memchunk.h"
 #include "inc/mu_io.h"
+#include "inc/mu_diag.h"
+#include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/uio.h>
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -177,6 +180,8 @@ static UCHAR* boyer_moore (UCHAR *string, ULONG stringlen, UCHAR *pat, ULONG pat
 
 ULONG* execute_scanner_BM(PID target, UCHAR *data, INT data_size, INT *n_matches)
 {
+    MU_ERROR is_ok = ERR_OK;
+    diag_trace trace;
     INT size = 0;
     INT nmatches = 0;
     ULONG *matches = malloc((sizeof *matches)*(nmatches + 1));
@@ -197,7 +202,10 @@ ULONG* execute_scanner_BM(PID target, UCHAR *data, INT data_size, INT *n_matches
             matches = realloc(matches, ((sizeof *matches)*(nmatches + 1)));
             if(matches == NULL)
             {
-                exit(1);
+                is_ok = ERR_GENERIC;
+                sprintf(trace, "%s | Error writing into memory of target process!", __func__);
+                diag_critical(trace, is_ok);
+                exit(is_ok);
             }
             matches[nmatches] = match;
             nmatches++;
@@ -214,6 +222,8 @@ ULONG* execute_scanner_BM(PID target, UCHAR *data, INT data_size, INT *n_matches
 
 ULONG* execute_scanner_STD(PID target, UCHAR *data, INT data_size, INT *n_matches)
 {
+    MU_ERROR is_ok = ERR_OK;
+    diag_trace trace;
     INT size = 0;
     INT nmatches = 0;
     ULONG *matches = malloc((sizeof *matches)*(nmatches + 1));
@@ -234,7 +244,10 @@ ULONG* execute_scanner_STD(PID target, UCHAR *data, INT data_size, INT *n_matche
             matches = realloc(matches, ((sizeof *matches)*(nmatches + 1)));
             if(matches == NULL)
             {
-                exit(1);
+                is_ok = ERR_GENERIC;
+                sprintf(trace, "%s | Error writing into memory of target process!", __func__);
+                diag_critical(trace, is_ok);
+                exit(is_ok);
             }
             matches[nmatches] = match;
             nmatches++;
@@ -251,6 +264,8 @@ ULONG* execute_scanner_STD(PID target, UCHAR *data, INT data_size, INT *n_matche
 
 ULONG* execute_scanner_STD_MTH(PID target, UCHAR *data, INT data_size, INT *n_matches)
 {
+    MU_ERROR is_ok = ERR_OK;
+    diag_trace trace;
     INT size = 0;
     INT nmatches = 0;
     ULONG *matches = malloc((sizeof *matches)*(nmatches + 1));
@@ -271,7 +286,10 @@ ULONG* execute_scanner_STD_MTH(PID target, UCHAR *data, INT data_size, INT *n_ma
             matches = realloc(matches, ((sizeof *matches)*(nmatches + 1)));
             if(matches == NULL)
             {
-                exit(1);
+                is_ok = ERR_GENERIC;
+                sprintf(trace, "%s | Error writing into memory of target process!", __func__);
+                diag_critical(trace, is_ok);
+                exit(is_ok);
             }
             matches[nmatches] = match;
             nmatches++;
@@ -286,8 +304,10 @@ ULONG* execute_scanner_STD_MTH(PID target, UCHAR *data, INT data_size, INT *n_ma
     return matches;
 }
 
-MU_ERROR execute_filtering(PID target, ULONG **addresses, UCHAR *data, INT data_size, INT *n_matches)
+MU_ERROR execute_filtering(PID target, ULONG **addresses, UCHAR *data, ULONG data_size, INT *n_matches)
 {
+    MU_ERROR is_ok = ERR_OK;
+    diag_trace trace;
     INT nmatches = 0;
     INT og_n_matches = *n_matches;
     ULONG *matches = malloc((sizeof *matches)*(nmatches + 1));
@@ -300,23 +320,29 @@ MU_ERROR execute_filtering(PID target, ULONG **addresses, UCHAR *data, INT data_
 
         local[0].iov_base = read;
         local[0].iov_len = data_size;
-        remote[0].iov_base = (void *) (*matches)[i];
+        remote[0].iov_base = (void *) (*addresses)[i];
         remote[0].iov_len = data_size;
 
         INT64 n_read = process_vm_readv(target, local, 1, remote, 1, 0);
 
         if(n_read < 0 || (ULONG) n_read != data_size)
         {
-            exit(1);
+            is_ok = ERR_GENERIC;
+            sprintf(trace, "%s | Error writing into memory of target process!", __func__);
+            diag_critical(trace, is_ok);
+            exit(is_ok);
         }
         int cmp = memcmp(read, data, data_size);
         if(cmp == 0)
         {
-            ULONG match = (*matches)[i];
+            ULONG match = (*addresses)[i];
             matches = realloc(matches, ((sizeof *matches)*(nmatches + 1)));
             if(matches == NULL)
             {
-                exit(1);
+                is_ok = ERR_GENERIC;
+                sprintf(trace, "%s | Error writing into memory of target process!", __func__);
+                diag_critical(trace, is_ok);
+                exit(is_ok);
             }
             matches[nmatches] = match;
             nmatches++;
@@ -326,10 +352,10 @@ MU_ERROR execute_filtering(PID target, ULONG **addresses, UCHAR *data, INT data_
 
     *n_matches = nmatches;
 
-    free(*matches);
+    free(*addresses);
  
-    *addresses = malloc((sizeof *matches)*(nmatches + 1));
-    memcpy(*matches, matches, (sizeof *matches)*(nmatches + 1));
+    *addresses = malloc((sizeof *addresses)*(nmatches + 1));
+    memcpy(*addresses, matches, (sizeof *matches)*(nmatches + 1));
     free(matches);
 
     return ERR_OK;

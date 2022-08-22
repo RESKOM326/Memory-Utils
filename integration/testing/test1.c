@@ -176,8 +176,8 @@ MU_ERROR test_modify_values(PID target)
     MU_ERROR is_ok = ERR_OK;
     INT32 new_value = 999999;
     ULONG addresses[2];
-    addresses[0] = (ULONG) 0x7ffebc3484e8;
-    addresses[1] = (ULONG) 0x7ffebc3484ec;
+    addresses[0] = (ULONG) 0x7ffc1b6bbab8;
+    addresses[1] = (ULONG) 0x7ffc1b6bbabc;
     INT size = sizeof(INT32);
     UCHAR bytes[size];
     memcpy(bytes, &new_value, size);
@@ -236,6 +236,89 @@ MU_ERROR test_scanner_and_efficiency(PID target, INT algorithm)
     return is_ok;   
 }
 
+MU_ERROR test_filtering(PID target)
+{
+    MU_ERROR is_ok = ERR_OK;
+    INT32 to_search = 1000;
+    INT32 size = sizeof(INT32);
+    UCHAR bytes[size];
+    memcpy(bytes, &to_search, size);
+
+    printf("Finding matches of INT32 - 1000...\n");
+
+    INT n_matches = 0;
+    ULONG *matches;
+
+    /* Scan and wait 5 seconds to change simulator values */
+    matches = execute_scanner_STD_MTH(target, bytes, size, &n_matches);
+
+    for(INT i = 0; i < n_matches; i++)
+    {
+        printf("Match %i: %#lx\n", i+1, matches[i]);
+    }
+    sleep(5);
+
+    printf("\nExecuting filtering with 999...\n\n");
+    to_search = 999;
+    memcpy(bytes, &to_search, size);
+
+    is_ok = execute_filtering(target, &matches, bytes, size, &n_matches);
+
+    for(INT i = 0; i < n_matches; i++)
+    {
+        printf("Match %i: %#lx\n", i+1, matches[i]);
+    }
+
+    free(matches);
+
+    return is_ok;   
+}
+
+MU_ERROR test_scan_filter_modidy(PID target)
+{
+    MU_ERROR is_ok = ERR_OK;
+    INT32 to_search = 999;
+    INT32 size = sizeof(INT32);
+    UCHAR bytes[size];
+    memcpy(bytes, &to_search, size);
+
+    printf("Finding matches of INT32 - 1000...\n");
+
+    INT n_matches = 0;
+    ULONG *matches;
+
+    /* Scan and wait 5 seconds to change simulator values */
+    matches = execute_scanner_STD_MTH(target, bytes, size, &n_matches);
+
+    for(INT i = 0; i < n_matches; i++)
+    {
+        printf("Match %i: %#lx\n", i+1, matches[i]);
+    }
+    sleep(5);
+
+    printf("\nExecuting filtering with 999...\n\n");
+    to_search = 998;
+    memcpy(bytes, &to_search, size);
+
+    is_ok = execute_filtering(target, &matches, bytes, size, &n_matches);
+
+    for(INT i = 0; i < n_matches; i++)
+    {
+        printf("Match %i: %#lx\n", i+1, matches[i]);
+    }
+
+    /* Modify found value to 9999999 */
+    INT32 new_val = 9999999;
+    memcpy(bytes, &new_val, size);
+
+    printf("\nModify found value to 9999999...\n\n");
+    is_ok = modify_values(target, matches, n_matches, bytes, size);
+
+    free(matches);
+
+    return is_ok;   
+}
+
 INT main(INT argc, CHAR **argv)
 {
     if(argc < 2)
@@ -264,6 +347,8 @@ INT main(INT argc, CHAR **argv)
             "****************************************************************\n\n");
     printf("RUN TEST EXECUTE_SCAN_AND_EFFICIENCY_BM:\t%d\n\n", test_scanner_and_efficiency(target, ALG_BOYER_MOORE));
     printf("RUN TEST EXECUTE_SCAN_AND_EFFICIENCY_STD:\t%d\n\n", test_scanner_and_efficiency(target, ALG_GNU_MEMMEM));
+    printf("RUN TEST EXECUTE_FILTERING:\t%d\n\n", test_filtering(target));
+    printf("RUN TEST EXECUTE_SCAN_FILTER_MODIFY:\t%d\n\n", test_scan_filter_modidy(target));
     printf("****************************************************************"
             "****************************************************************\n\n");
     printf("N_CORES_ONLN: %ld\n", sysconf(_SC_NPROCESSORS_ONLN));

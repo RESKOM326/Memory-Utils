@@ -15,7 +15,7 @@ DIR_BLD 		= 	../bld
 DEPENDENCY 		=	$(DIR_BLD)/mu_utils.o $(DIR_BLD)/mu_diag.o $(DIR_BLD)/mu_memchunk.o $(DIR_BLD)/mu_io.o $(DIR_BLD)/mu_scanner.o
 INCLUDEDIR		=	-I$(DIR_SRC)/inc
 
-default:	scanner tests cleanobj
+default:	scanner tests memscanlx cleanobj
 
 scanner:
 			$(CC) $(CFLAGS) $(INCLUDEDIR) -c -o $(DIR_BLD)/mu_utils.o $(DIR_SRC)/mu_utils.c
@@ -29,6 +29,9 @@ tests:
 
 simulator:
 			$(CC) -o $(DIR_BLD)/simulator $(DIR_TST)/simulator.c 
+
+memscanlx:	
+			$(CC) $(CFLAGS) $(INCLUDEDIR) -o $(DIR_BLD)/mem_scan_linux $(DIR_SRC)/mem_scan_linux.c $(DEPENDENCY)
 
 cleanobj:
 			rm -rf $(DIR_BLD)/*.o

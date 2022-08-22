@@ -51,7 +51,8 @@ typedef enum error_codes
     ERR_OK          =   0,          /* No error */
     ERR_EPERM       =   100,        /* pid_exists -> No permissions */
     ERR_ESRCH       =   101,        /* pid_exists -> Does not exist */
-    ERR_FUNC_OPT    =   102,        /* get_memory_chunks -> Wrong argument option */
+    ERR_FUNC_OPT    =   102,        /* Wrong argument option for function */
+    ERR_ARGS_MAIN   =   103,        /* Argument error for main program */
     ERR_GENERIC     =   500         /* Generic error for C/Sys function calls */
 
 } MU_ERROR;
