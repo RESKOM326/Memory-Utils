@@ -30,7 +30,7 @@ typedef double          REAL64;
 typedef bool            BOOL;
 typedef pid_t           PID;
 
-/* Union used to change between bytes and data type - MAYBE UNNECESSARY */
+/* Union used to change between bytes and data type */
 typedef union data_types
 {
     UCHAR   byte;
@@ -39,6 +39,7 @@ typedef union data_types
     INT64   int64;
     REAL32  real32;
     REAL64  real64;
+    UCHAR   bytes8[1];      /* Byte information for 8-bit data type */
     UCHAR   bytes16[2];     /* Byte information for 16-bit data type */
     UCHAR   bytes32[4];     /* Byte information for 32-bit data type */
     UCHAR   bytes64[8];     /* Byte information for 64-bit data type */
