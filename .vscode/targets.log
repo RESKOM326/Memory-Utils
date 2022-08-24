@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Aug 23 10:32:19 2022
+# Make data base, printed on Wed Aug 24 09:43:21 2022
 
 # Variables
 
@@ -51,7 +49,7 @@ XDG_CONFIG_DIRS = /etc/xdg/xdg-xubuntu:/etc/xdg:/etc/xdg
 # environment
 GTK_OVERLAY_SCROLLING = 0
 # environment
-STARSHIP_SESSION_KEY = 2538606969488322
+STARSHIP_SESSION_KEY = 8850913955811312
 # automatic
 @F = $(notdir $@)
 # 'override' directive
@@ -65,7 +63,7 @@ DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-a61e0d36-6c28-4ad6-b789-622d73cca458.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-ee69f052-9abb-4835-abdf-77c9dd5d4faf.sock
 # environment
 LC_NAME = es_ES.UTF-8
 # environment
@@ -79,11 +77,11 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/reskom326lx-Pulse-GL76-11UEK:@/tmp/.ICE-unix/1093,unix/reskom326lx-Pulse-GL76-11UEK:/tmp/.ICE-unix/1093
+SESSION_MANAGER = local/reskom326lx-Pulse-GL76-11UEK:@/tmp/.ICE-unix/1089,unix/reskom326lx-Pulse-GL76-11UEK:/tmp/.ICE-unix/1089
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
-WINDOWID = 65011715
+WINDOWID = 60817411
 # makefile
 MAKEFILE_LIST := 
 # environment
@@ -117,7 +115,7 @@ QT_QPA_PLATFORMTHEME = gtk2
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 1170
+SSH_AGENT_PID = 1166
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = XFCE
 # environment
@@ -227,7 +225,7 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 3191
+VSCODE_PID = 2998
 # environment
 STARSHIP_SHELL = fish
 # variable set hash-table stats:
@@ -289,6 +287,9 @@ GNUmakefile:
 
 # No 'vpath' search paths.
 
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 # No general ('VPATH' variable) search path.
 
 # strcache buffers: 1 (0) / strings = 18 / storage = 145 B / avg = 8 B
@@ -297,6 +298,6 @@ GNUmakefile:
 # strcache performance: lookups = 21 / hit rate = 14%
 # hash-table stats:
 # Load=18/8192=0%, Rehash=0, Collisions=1/21=5%
-# Finished Make data base on Tue Aug 23 10:32:19 2022
+# Finished Make data base on Wed Aug 24 09:43:21 2022
 
  

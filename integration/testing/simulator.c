@@ -22,29 +22,35 @@ int main(){
     int bronze = 1000;
     short health = 12500;
     float ratio = 1.23242;
+    int text_counter = 2;
+    char text[] = "Welcome to the simulator! 1";
     int n_newlines = 1;
 
     while(1){
         printf("Iteration: %i\n", n_newlines);
-        printf("Byte Val (%li bytes): %-9hhu - %p\n", sizeof(byte), byte, (void *) &byte);
-        printf("Gold     (%li bytes): %-9i - %p\n", sizeof(gold), gold, (void *) &gold);
-        printf("Silver   (%li bytes): %-9i - %p\n", sizeof(silver), silver, (void *) &silver);
-        printf("Bronze   (%li bytes): %-9i - %p\n", sizeof(bronze), bronze, (void *) &bronze);
-        printf("Health   (%li bytes): %-9hu - %p\n", sizeof(health), health, (void *) &health);
-        printf("Ratio    (%li bytes): %-9f - %p\n", sizeof(float), ratio, (void *) &ratio);
+        printf("Byte Val (%-2li bytes): %-28hhu - %p\n", sizeof(byte), byte, (void *) &byte);
+        printf("Gold     (%-2li bytes): %-28i - %p\n", sizeof(gold), gold, (void *) &gold);
+        printf("Silver   (%-2li bytes): %-28i - %p\n", sizeof(silver), silver, (void *) &silver);
+        printf("Bronze   (%-2li bytes): %-28i - %p\n", sizeof(bronze), bronze, (void *) &bronze);
+        printf("Health   (%-2li bytes): %-28hu - %p\n", sizeof(health), health, (void *) &health);
+        printf("Ratio    (%-2li bytes): %-28f - %p\n", sizeof(float), ratio, (void *) &ratio);
+        printf("Text     (%-2li bytes): %-28s - %p\n", sizeof(text), text, (void *) &text);
 
         char *line = NULL;
         size_t size = 0;
         getline(&line, &size, stdin);
 
         if(*line == '\n'){
-            // Newline read
+            /* Newline read */
             byte++;
             gold--;
             silver-=2;
             bronze-=3;
             health-=4;
             ratio += 0.5;
+            text[sizeof(text) - 2] = text_counter++ + '0';
+            /* Reset */
+            if(text_counter >= 10) text_counter = 1;
             n_newlines++;
         } else{
             free(line); break;
