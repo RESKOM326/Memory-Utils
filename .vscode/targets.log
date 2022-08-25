@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Aug 24 09:43:21 2022
+# Make data base, printed on Thu Aug 25 13:24:15 2022
 
 # Variables
 
@@ -49,7 +49,7 @@ XDG_CONFIG_DIRS = /etc/xdg/xdg-xubuntu:/etc/xdg:/etc/xdg
 # environment
 GTK_OVERLAY_SCROLLING = 0
 # environment
-STARSHIP_SESSION_KEY = 8850913955811312
+STARSHIP_SESSION_KEY = 9841604876575971
 # automatic
 @F = $(notdir $@)
 # 'override' directive
@@ -63,7 +63,7 @@ DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-ee69f052-9abb-4835-abdf-77c9dd5d4faf.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-f9160b48-127a-49b4-974c-7ba0e6909781.sock
 # environment
 LC_NAME = es_ES.UTF-8
 # environment
@@ -77,7 +77,7 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/reskom326lx-Pulse-GL76-11UEK:@/tmp/.ICE-unix/1089,unix/reskom326lx-Pulse-GL76-11UEK:/tmp/.ICE-unix/1089
+SESSION_MANAGER = local/reskom326lx-Pulse-GL76-11UEK:@/tmp/.ICE-unix/1085,unix/reskom326lx-Pulse-GL76-11UEK:/tmp/.ICE-unix/1085
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -115,7 +115,7 @@ QT_QPA_PLATFORMTHEME = gtk2
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 1166
+SSH_AGENT_PID = 1162
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = XFCE
 # environment
@@ -225,7 +225,7 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 2998
+VSCODE_PID = 2185
 # environment
 STARSHIP_SHELL = fish
 # variable set hash-table stats:
@@ -278,6 +278,9 @@ makefile:
 GNUmakefile:
 #  Implicit rule search has been done.
 #  File does not exist.
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 #  File has been updated.
 #  Failed to be updated.
 
@@ -287,9 +290,6 @@ GNUmakefile:
 
 # No 'vpath' search paths.
 
- 
-make: *** No rule to make target 'all'.  Stop.
-
 # No general ('VPATH' variable) search path.
 
 # strcache buffers: 1 (0) / strings = 18 / storage = 145 B / avg = 8 B
@@ -298,6 +298,6 @@ make: *** No rule to make target 'all'.  Stop.
 # strcache performance: lookups = 21 / hit rate = 14%
 # hash-table stats:
 # Load=18/8192=0%, Rehash=0, Collisions=1/21=5%
-# Finished Make data base on Wed Aug 24 09:43:21 2022
+# Finished Make data base on Thu Aug 25 13:24:15 2022
 
  

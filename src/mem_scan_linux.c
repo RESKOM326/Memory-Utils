@@ -18,6 +18,7 @@
 #include <string.h>
 #include <limits.h>
 #include <float.h>
+#include <time.h>
 
 #define OPT_1BYTE   0
 #define OPT_INT16   1
@@ -31,6 +32,8 @@
 #define ASK_SCAN    1
 
 #define MAX_STR_SZ  1023
+
+#define BILLION     1000000000.0
 
 #define NEWL_TO_NUL(buf)    if(buf[strlen(buf) - 1] == '\n'){buf[strlen(buf) - 1] = '\0';}
 
@@ -48,6 +51,10 @@ INT ask_data(INT type_index, UCHAR **data);
  */
 INT main(int argc, char **argv)
 {
+    /* Benchmark */
+    struct timespec start;
+    struct timespec end;
+    REAL64 elapsed_time;
 
     /* CHECK ARGUMENTS ------------------------------------------------------------------- */
 
@@ -123,7 +130,11 @@ INT main(int argc, char **argv)
     /* SCANNING -------------------------------------------------------------------------- */
 
         printf("Please wait...\n\n");
+        clock_gettime(CLOCK_MONOTONIC, &start);
         matches = execute_scanner_STD_MTH(target, data, data_size, &n_matches);
+        clock_gettime(CLOCK_MONOTONIC, &end);
+        elapsed_time = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / BILLION;
+        printf("ELAPSED TIME: %f\n", elapsed_time);
         free(data);
         if(n_matches == 0)
         {
@@ -139,44 +150,31 @@ INT main(int argc, char **argv)
 
         if(!go_to_end)
         {
-            BOOL done_filter = false;
+            BOOL done_filter = true;
+            BOOL stop_filter = false;
             if(ask_for_more(ASK_FILTER))
             {
-                // do
-                // {
-                //     printf("\nPlease, select the value to search: ");
-                //     data_size = ask_data(type_index, &data);
-                //     printf("Please wait...\n\n");
-                //     execute_filtering(target, &matches, data, data_size, &n_matches);
-                //     free(data);
-                //     if(n_matches == 0)
-                //     {
-                //         printf("No matches found\n");
-                //         break;
-                //     }
-                //     printf("%i address<es> matching the value\n", n_matches);
-                //     if(!ask_for_more(ASK_FILTER))
-                //     {
-                //         done_filter = true;
-                //     }
-                // } 
-                // while(!done_filter);
-                while(!done_filter)
+                while(!stop_filter)
                 {
                     printf("\nPlease, select the value to search: ");
                     data_size = ask_data(type_index, &data);
                     printf("Please wait...\n\n");
+                    clock_gettime(CLOCK_MONOTONIC, &start);
                     execute_filtering(target, &matches, data, data_size, &n_matches);
+                    clock_gettime(CLOCK_MONOTONIC, &end);
+                    elapsed_time = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / BILLION;
+                    printf("ELAPSED TIME: %f\n", elapsed_time);
                     free(data);
                     if(n_matches == 0)
                     {
                         printf("No matches found\n");
+                        done_filter = false;
                         break;
                     }
                     printf("%i address<es> matching the value\n", n_matches);
                     if(!ask_for_more(ASK_FILTER))
                     {
-                        done_filter = true;
+                        stop_filter = true;
                     }
                 }
             }
@@ -245,7 +243,6 @@ BOOL ask_for_more(INT option)
     INT keep_searching = 0;
     CHAR input_buff[MAX_STR_SZ];
     CHAR *thrash;
-    // fflush(stdin);
     while(!correct_choice)
     {
         if(option == ASK_FILTER)
@@ -253,10 +250,11 @@ BOOL ask_for_more(INT option)
             printf("Do you want to filter the matches? (0: no; 1: yes): ");
         }
         else printf("Do you want to scan more values? (0: no; 1: yes): ");
+
         fgets(input_buff, MAX_STR_SZ, stdin);
         NEWL_TO_NUL(input_buff);
         keep_searching = (INT32) strtol(input_buff, &thrash, 10);
-        printf("KEEP SEARCHING: %d - PTR: %s\n", keep_searching, thrash);
+
         if(*thrash != '\0' || keep_searching < 0 || keep_searching > 1)
         {
             printf("\nPlease, select a valid choice (1 for YES, 0 for NO): ");
@@ -402,14 +400,12 @@ INT ask_data(INT type_index, UCHAR **data)
 
             case OPT_STRNG:
                 fgets(input_buff, MAX_STR_SZ, stdin);
-
-                /* Not checking buffer overflow */
+                /* Not checking buffer overflow because lazyness */
                 NEWL_TO_NUL(input_buff);
                 ULONG length = strlen(input_buff);
                 ret_val = length + 1;
                 *data = malloc(ret_val);
                 memcpy(*data, input_buff, ret_val);
-                // printf("BufSz: %s - %ld\n", input_buff, sizeof(input_buff));
                 value_ok = true;
             /* END SWITCH */
         }
