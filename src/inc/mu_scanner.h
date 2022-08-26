@@ -20,18 +20,6 @@
 
 /**
  * @brief Scans through the target memory in search of the desired value. 
- * This version uses Boyer-Moore algorithm.
- * 
- * @param target PID of the target process
- * @param data Data bytes to search
- * @param data_size Size in bytes of the data
- * @param n_matches Stores the number of matching addresses
- * @return List of addresses that match the desired value
- */
-extern ULONG* execute_scanner_BM(PID target, UCHAR *data, INT data_size, INT *n_matches);
-
-/**
- * @brief Scans through the target memory in search of the desired value. 
  * This version uses optimized search with "memmem" from feature test macros.
  * 
  * @param target PID of the target process
@@ -40,19 +28,7 @@ extern ULONG* execute_scanner_BM(PID target, UCHAR *data, INT data_size, INT *n_
  * @param n_matches Stores the number of matching addresses
  * @return List of addresses that match the desired value
  */
-extern ULONG* execute_scanner_STD(PID target, UCHAR *data, INT data_size, INT *n_matches);
-
-/**
- * @brief Scans through the target memory in search of the desired value. 
- * Same as STD version, but also using multithreading.
- * 
- * @param target PID of the target process
- * @param data Data bytes to search
- * @param data_size Size in bytes of the data
- * @param n_matches Stores the number of matching addresses
- * @return List of addresses that match the desired value
- */
-extern ULONG* execute_scanner_STD_MTH(PID target, UCHAR *data, INT data_size, INT *n_matches);
+extern ULONG* execute_scanner(PID target, UCHAR *data, INT data_size, INT *n_matches);
 
 /**
  * @brief Filters a list of addresses to narrow down the required address/es

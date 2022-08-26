@@ -189,10 +189,10 @@ MU_ERROR test_modify_values(PID target)
     return is_ok;
 }
 
-MU_ERROR test_scanner_and_efficiency(PID target, INT algorithm)
+MU_ERROR test_scanner_and_efficiency(PID target)
 {
     MU_ERROR is_ok = ERR_OK;
-    INT16 to_search = 12341;
+    INT16 to_search = 12500;
     INT size = sizeof(INT16);
     UCHAR bytes[size];
     memcpy(bytes, &to_search, size);
@@ -202,28 +202,14 @@ MU_ERROR test_scanner_and_efficiency(PID target, INT algorithm)
     struct timespec end;
     REAL64 elapsed_time;
 
-    printf("Finding matches of INT16 - 12343...\n");
+    printf("Finding matches of INT16 - 12500...\n");
 
     INT n_matches = 0;
     ULONG *matches;
-    if(algorithm == ALG_BOYER_MOORE)
-    {
-        clock_gettime(CLOCK_MONOTONIC, &start);
-        matches = execute_scanner_BM(target, bytes, size, &n_matches);
-        clock_gettime(CLOCK_MONOTONIC, &end);
-    }
-    else if(algorithm == ALG_GNU_MEMMEM)
-    {
-        clock_gettime(CLOCK_MONOTONIC, &start);
-        matches = execute_scanner_STD(target, bytes, size, &n_matches);
-        clock_gettime(CLOCK_MONOTONIC, &end);
-    }
-    else
-    {
-        clock_gettime(CLOCK_MONOTONIC, &start);
-        matches = execute_scanner_STD_MTH(target, bytes, size, &n_matches);
-        clock_gettime(CLOCK_MONOTONIC, &end);        
-    }
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    matches = execute_scanner(target, bytes, size, &n_matches);
+    clock_gettime(CLOCK_MONOTONIC, &end);
+
     for(INT i = 0; i < n_matches; i++)
     {
         printf("Match %i: %#lx\n", i+1, matches[i]);
@@ -250,7 +236,7 @@ MU_ERROR test_filtering(PID target)
     ULONG *matches;
 
     /* Scan and wait 5 seconds to change simulator values */
-    matches = execute_scanner_STD_MTH(target, bytes, size, &n_matches);
+    matches = execute_scanner(target, bytes, size, &n_matches);
 
     for(INT i = 0; i < n_matches; i++)
     {
@@ -288,7 +274,7 @@ MU_ERROR test_scan_filter_modidy(PID target)
     ULONG *matches;
 
     /* Scan and wait 5 seconds to change simulator values */
-    matches = execute_scanner_STD_MTH(target, bytes, size, &n_matches);
+    matches = execute_scanner(target, bytes, size, &n_matches);
 
     for(INT i = 0; i < n_matches; i++)
     {
@@ -345,8 +331,7 @@ INT main(INT argc, CHAR **argv)
     printf("RUN TEST MODIFY_VALUES:\t%d\n\n", test_modify_values(target));
     printf("****************************************************************"
             "****************************************************************\n\n");
-    printf("RUN TEST EXECUTE_SCAN_AND_EFFICIENCY_BM:\t%d\n\n", test_scanner_and_efficiency(target, ALG_BOYER_MOORE));
-    printf("RUN TEST EXECUTE_SCAN_AND_EFFICIENCY_STD:\t%d\n\n", test_scanner_and_efficiency(target, ALG_GNU_MEMMEM));
+    printf("RUN TEST EXECUTE_SCAN_AND_EFFICIENCY:\t%d\n\n", test_scanner_and_efficiency(target));
     printf("RUN TEST EXECUTE_FILTERING:\t%d\n\n", test_filtering(target));
     printf("RUN TEST EXECUTE_SCAN_FILTER_MODIFY:\t%d\n\n", test_scan_filter_modidy(target));
     printf("****************************************************************"

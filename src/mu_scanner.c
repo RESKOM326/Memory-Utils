@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/uio.h>
+#include <sched.h>
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -28,7 +29,7 @@
 
 #define MODIF_CHNKS     1
 
-ULONG* execute_scanner_STD(PID target, UCHAR *data, INT data_size, INT *n_matches)
+ULONG* execute_scanner(PID target, UCHAR *data, INT data_size, INT *n_matches)
 {
     MU_ERROR is_ok = ERR_OK;
     diag_trace trace;
@@ -36,47 +37,6 @@ ULONG* execute_scanner_STD(PID target, UCHAR *data, INT data_size, INT *n_matche
     INT nmatches = 0;
     ULONG *matches = malloc((sizeof *matches)*(nmatches + 1));
     MU_MEM_CHUNK *filtered = get_memory_chunks(target, 1, &size);
-
-    for(INT i = 0; i < size; i++)
-    {
-        MU_MEM_CHUNK chnk = filtered[i];
-        UCHAR *bytes = read_chunk_data(target, chnk);
-        UCHAR *ptr = NULL;
-        ptr = memmem(bytes, chnk.chunk_size, data, data_size);
-
-        while(ptr)
-        {
-            ULONG offset = ptr - bytes;
-            ULONG match = chnk.addr_start + offset;
-            matches = realloc(matches, ((sizeof *matches)*(nmatches + 1)));
-            if(matches == NULL)
-            {
-                is_ok = ERR_GENERIC;
-                sprintf(trace, "%s | Error writing into memory of target process!", __func__);
-                diag_critical(trace, is_ok);
-                exit(is_ok);
-            }
-            matches[nmatches] = match;
-            nmatches++;
-            ptr = memmem(&bytes[offset + data_size], (chnk.chunk_size - offset - data_size), data, data_size);
-        }
-        free(chnk.chunk_name);
-        free(bytes);
-    }
-    *n_matches = nmatches;
-    free(filtered);
-
-    return matches;
-}
-
-ULONG* execute_scanner_STD_MTH(PID target, UCHAR *data, INT data_size, INT *n_matches)
-{
-    MU_ERROR is_ok = ERR_OK;
-    diag_trace trace;
-    INT size = 0;
-    INT nmatches = 0;
-    ULONG *matches = malloc((sizeof *matches)*(nmatches + 1));
-    MU_MEM_CHUNK *filtered = get_memory_chunks(target, MODIF_CHNKS, &size);
 
     for(INT i = 0; i < size; i++)
     {

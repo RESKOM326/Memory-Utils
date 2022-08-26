@@ -144,12 +144,13 @@ MU_MEM_CHUNK* get_memory_chunks(PID target, INT option, INT *size)
             diag_critical(trace, is_ok);
             exit(is_ok);
         }
-        /* All chunks. Just process */
-        if(option == ALL_CHUNKS)
+        /* It will process chunks as long as they are modifiable AND MODIF option OR ALL option */
+        INT flag = option;  /* Store parameter to local variable */
+        while(fgets(line, LINE_BUFFER, maps))
         {
-            while(fgets(line, LINE_BUFFER, maps))
+            MU_MEM_CHUNK chunk = parse_maps_line(line);
+            if((flag == MODIFIABLE_CHUNKS && IS_MODIFIABLE(chunk)) || flag == ALL_CHUNKS)
             {
-                MU_MEM_CHUNK chunk = parse_maps_line(line);
                 chunks = realloc(chunks, ((sizeof(*chunks))*(n_chunks + 1)));
                 if(chunks == NULL)
                 {
@@ -159,26 +160,6 @@ MU_MEM_CHUNK* get_memory_chunks(PID target, INT option, INT *size)
                     exit(is_ok);
                 }
                 chunks[n_chunks++] = chunk;
-            }
-        }
-        /* Only modifiable chunks. At this point only the MODIFIABLE option is possible */
-        else
-        {
-            while(fgets(line, LINE_BUFFER, maps))
-            {
-                MU_MEM_CHUNK chunk = parse_maps_line(line);
-                if(IS_MODIFIABLE(chunk))
-                {
-                    chunks = realloc(chunks, ((sizeof(*chunks))*(n_chunks + 1)));
-                    if(chunks == NULL)
-                    {
-                        is_ok = ERR_GENERIC;
-                        sprintf(trace, "%s | Cannot reserve more dynamic memory!", __func__);
-                        diag_critical(trace, is_ok);
-                        exit(is_ok);
-                    }
-                    chunks[n_chunks++] = chunk;
-                }
             }
         }
         /* Update size and liberate resources */

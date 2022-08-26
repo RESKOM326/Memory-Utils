@@ -131,7 +131,7 @@ INT main(int argc, char **argv)
 
         printf("Please wait...\n\n");
         clock_gettime(CLOCK_MONOTONIC, &start);
-        matches = execute_scanner_STD_MTH(target, data, data_size, &n_matches);
+        matches = execute_scanner(target, data, data_size, &n_matches);
         clock_gettime(CLOCK_MONOTONIC, &end);
         elapsed_time = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / BILLION;
         printf("ELAPSED TIME: %f\n", elapsed_time);

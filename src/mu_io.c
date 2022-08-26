@@ -62,7 +62,7 @@ UCHAR* read_chunk_data(PID target, MU_MEM_CHUNK chunk)
     INT64 n_read = process_vm_readv(target, local, 1, remote, 1, 0);
 
     /* If n_read < 0, it enters. If not, value is unsigned and can be safely casted to size_t for comparision */
-    if(n_read < 0 || (ULONG) n_read != to_read)
+    if(n_read < 0)
     {
         is_ok = ERR_GENERIC;
         sprintf(trace, "%s | Error reading memory of target process!", __func__);
