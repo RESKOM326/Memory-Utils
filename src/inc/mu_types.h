@@ -58,7 +58,7 @@ typedef enum error_codes
 
 } MU_ERROR;
 
-/* struct to store information about a memory chunk */
+/* Struct to store information about a memory chunk */
 typedef struct memory_chunk
 {
     ULONG   addr_start;
@@ -70,5 +70,13 @@ typedef struct memory_chunk
     ULONG   chnk_name_sz;
     
 } MU_MEM_CHUNK;
+
+/* Struct to store offsets and lengths of groups of chunks. Used for multithreading */
+typedef struct core_offsets
+{
+    ULONG off_start;
+    ULONG off_len;
+
+} MU_OFFSETS;
 
 #endif  /* _MU_TYPES_H */

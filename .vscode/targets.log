@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Aug 26 11:04:54 2022
+# Make data base, printed on Wed Sep 28 13:23:32 2022
 
 # Variables
 
@@ -47,7 +49,7 @@ XDG_CONFIG_DIRS = /etc/xdg/xdg-xubuntu:/etc/xdg:/etc/xdg
 # environment
 GTK_OVERLAY_SCROLLING = 0
 # environment
-STARSHIP_SESSION_KEY = 1641906093170172
+STARSHIP_SESSION_KEY = 1156310315663227
 # automatic
 @F = $(notdir $@)
 # 'override' directive
@@ -71,11 +73,11 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/reskom326lx-Pulse-GL76-11UEK:@/tmp/.ICE-unix/1065,unix/reskom326lx-Pulse-GL76-11UEK:/tmp/.ICE-unix/1065
+SESSION_MANAGER = local/reskom326lx-Pulse-GL76-11UEK:@/tmp/.ICE-unix/1094,unix/reskom326lx-Pulse-GL76-11UEK:/tmp/.ICE-unix/1094
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
-WINDOWID = 62914563
+WINDOWID = 60817411
 # makefile
 MAKEFILE_LIST := 
 # environment
@@ -105,7 +107,7 @@ QT_QPA_PLATFORMTHEME = gtk2
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 1142
+SSH_AGENT_PID = 1177
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = XFCE
 # environment
@@ -119,7 +121,7 @@ VSCODE_CODE_CACHE_PATH = /home/reskom326-lx/.config/Code/CachedData/e4503b30fc78
 # environment
 LOGNAME = reskom326-lx
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # automatic
 +F = $(notdir $+)
 # environment
@@ -211,7 +213,7 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 1876
+VSCODE_PID = 1898
 # environment
 STARSHIP_SHELL = fish
 # variable set hash-table stats:
@@ -281,8 +283,6 @@ GNUmakefile:
 # strcache performance: lookups = 21 / hit rate = 14%
 # hash-table stats:
 # Load=18/8192=0%, Rehash=0, Collisions=1/21=5%
-# Finished Make data base on Fri Aug 26 11:04:54 2022
+# Finished Make data base on Wed Sep 28 13:23:32 2022
 
  
-make: *** No rule to make target 'all'.  Stop.
-

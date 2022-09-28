@@ -20,6 +20,8 @@
 #include <float.h>
 #include <time.h>
 
+/* #include <unistd.h> */
+
 #define OPT_1BYTE   0
 #define OPT_INT16   1
 #define OPT_INT32   2
@@ -51,6 +53,10 @@ INT ask_data(INT type_index, UCHAR **data);
  */
 INT main(int argc, char **argv)
 {
+    /* RANDOM TESTING - LEAVE BLANK IF NOT USED ------------------------------------------ */
+
+    /* RANDOM TESTING - LEAVE BLANK IF NOT USED ------------------------------------------ */
+
     /* Benchmark */
     struct timespec start;
     struct timespec end;
@@ -134,7 +140,7 @@ INT main(int argc, char **argv)
         matches = execute_scanner(target, data, data_size, &n_matches);
         clock_gettime(CLOCK_MONOTONIC, &end);
         elapsed_time = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / BILLION;
-        printf("ELAPSED TIME: %f\n", elapsed_time);
+        printf("Scanning took %.2f second(s)\n", elapsed_time);
         free(data);
         if(n_matches == 0)
         {
@@ -163,7 +169,7 @@ INT main(int argc, char **argv)
                     execute_filtering(target, &matches, data, data_size, &n_matches);
                     clock_gettime(CLOCK_MONOTONIC, &end);
                     elapsed_time = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / BILLION;
-                    printf("ELAPSED TIME: %f\n", elapsed_time);
+                    printf("Filtering took %.2f second(s)\n", elapsed_time);
                     free(data);
                     if(n_matches == 0)
                     {
